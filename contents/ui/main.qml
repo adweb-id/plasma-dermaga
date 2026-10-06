@@ -34,6 +34,11 @@ PlasmoidItem {
     readonly property alias activeModel: activeModel
     readonly property alias inactiveModel: inactiveModel
     readonly property bool showInactive: Plasmoid.configuration.showInactive
+    // Ask before Stop and Restart
+    readonly property bool confirmActions: Plasmoid.configuration.confirmActions
+    // Names of containers pinned to the top of their tab (names survive re-creation, IDs do not)
+    readonly property var pinnedNames: Plasmoid.configuration.pinned
+
     // Row details chosen in the settings
     readonly property bool showImage: Plasmoid.configuration.showImage
     readonly property bool showStatus: Plasmoid.configuration.showStatus
@@ -131,7 +136,12 @@ PlasmoidItem {
         activeCount = list.filter(c => c.isActive).length;
         inactiveCount = list.length - activeCount;
 
+        // Pinned containers first, then by name
         const shown = list.filter(c => Docker.matches(c, searchText));
+        for (const c of shown) {
+            c.pinned = isPinned(c.cname);
+        }
+        shown.sort((a, b) => (a.pinned === b.pinned ? a.cname.localeCompare(b.cname) : (a.pinned ? -1 : 1)));
         const active = shown.filter(c => c.isActive);
         const inactive = shown.filter(c => !c.isActive);
         activeShown = active.length;
@@ -141,6 +151,44 @@ PlasmoidItem {
     }
 
     onSearchTextChanged: syncModel(lastList)
+    onPinnedNamesChanged: syncModel(lastList)
+
+    function isPinned(name) {
+        return pinnedNames.indexOf(name) !== -1;
+    }
+
+    function togglePin(name) {
+        const names = pinnedNames.filter(n => n !== name);
+        if (!isPinned(name)) {
+            names.push(name);
+        }
+        Plasmoid.configuration.pinned = names;
+    }
+
+    // --- CPU and memory, fetched while the pointer rests on a running container ---
+
+    // cid -> {cpu, mem, at}; statsRevision bumps so rows re-read it
+    property var stats: ({})
+    property int statsRevision: 0
+
+    function fetchStats(id) {
+        const cached = stats[id];
+        if (cached && Date.now() - cached.at < 10000) {
+            return;
+        }
+        const command = Docker.statsCommand(id);
+        if (!command) {
+            return;
+        }
+        exec(command, (stdout, stderr, exitCode) => {
+            const value = exitCode === 0 ? Docker.parseStats(stdout) : null;
+            if (value) {
+                value.at = Date.now();
+                stats[id] = value;
+                statsRevision++;
+            }
+        });
+    }
 
     // Updates rows in place so the list keeps its scroll position.
     function syncInto(model, list) {

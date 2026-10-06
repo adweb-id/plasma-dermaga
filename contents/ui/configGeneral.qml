@@ -6,6 +6,7 @@ import org.kde.kcmutils as KCM
 KCM.SimpleKCM {
     property alias cfg_refreshInterval: intervalSpin.value
     property alias cfg_showInactive: inactiveCheck.checked
+    property alias cfg_confirmActions: confirmCheck.checked
     property alias cfg_showImage: imageCheck.checked
     property alias cfg_showStatus: statusCheck.checked
     property alias cfg_showPorts: portsCheck.checked
@@ -25,6 +26,11 @@ KCM.SimpleKCM {
             id: inactiveCheck
             Kirigami.FormData.label: i18n("Containers:")
             text: i18n("Show stopped containers")
+        }
+
+        QQC2.CheckBox {
+            id: confirmCheck
+            text: i18n("Ask before Stop and Restart")
         }
 
         Item {

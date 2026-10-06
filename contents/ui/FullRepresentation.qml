@@ -62,6 +62,7 @@ PlasmaExtras.Representation {
 
             PlasmaExtras.SearchField {
                 id: searchField
+                objectName: "searchField"
                 Layout.fillWidth: true
                 visible: full.ready
                 placeholderText: i18n("Search name, image, port or IP…")
@@ -75,10 +76,15 @@ PlasmaExtras.Representation {
                         event.accepted = false; // let Escape close the popup
                     }
                 }
+                // Down moves into the list; Enter opens the menu of the first match
+                Keys.onDownPressed: full.focusList(0)
+                Keys.onReturnPressed: full.openMenuAt(0)
+                Keys.onEnterPressed: full.openMenuAt(0)
             }
 
             PlasmaComponents3.TabBar {
                 id: tabs
+                objectName: "tabs"
                 Layout.fillWidth: true
                 visible: full.ready && full.widget.showInactive
 
@@ -100,13 +106,63 @@ PlasmaExtras.Representation {
 
         contentItem: ListView {
             id: list
+            objectName: "containerList"
             model: full.onStoppedTab ? full.widget.inactiveModel : full.widget.activeModel
             clip: true
             boundsBehavior: Flickable.StopAtBounds
+            keyNavigationEnabled: true
+
+            // Keyboard: Up/Down select, Enter/Space/Menu open the row's menu,
+            // Left/Right switch tabs, Esc or Up on the first row go back to the search,
+            // and typing goes straight into the search field.
+            Keys.onUpPressed: event => {
+                if (currentIndex <= 0) {
+                    searchField.forceActiveFocus();
+                } else {
+                    decrementCurrentIndex();
+                }
+            }
+            Keys.onReturnPressed: full.openMenuAt(currentIndex)
+            Keys.onEnterPressed: full.openMenuAt(currentIndex)
+            Keys.onSpacePressed: full.openMenuAt(currentIndex)
+            Keys.onMenuPressed: full.openMenuAt(currentIndex)
+            Keys.onLeftPressed: tabs.currentIndex = 0
+            Keys.onRightPressed: {
+                if (full.widget.showInactive) {
+                    tabs.currentIndex = 1;
+                }
+            }
+            Keys.onEscapePressed: searchField.forceActiveFocus()
+            Keys.onPressed: event => {
+                if (event.text.length > 0 && event.text.trim() !== "" && !(event.modifiers & Qt.ControlModifier)) {
+                    full.widget.searchText += event.text;
+                    searchField.forceActiveFocus();
+                    event.accepted = true;
+                }
+            }
 
             delegate: ContainerDelegate {
                 widget: full.widget
             }
+        }
+    }
+
+    function focusList(index) {
+        if (list.count > 0) {
+            list.currentIndex = Math.min(index, list.count - 1);
+            list.forceActiveFocus();
+        }
+    }
+
+    function openMenuAt(index) {
+        if (index < 0 || index >= list.count) {
+            return;
+        }
+        focusList(index);
+        list.positionViewAtIndex(index, ListView.Contain);
+        const item = list.itemAtIndex(index);
+        if (item) {
+            item.openMenu(true);
         }
     }
 

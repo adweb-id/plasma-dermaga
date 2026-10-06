@@ -7,7 +7,10 @@ restart, read logs or open a shell without going to the terminal first.
 
 - Pure QML + JavaScript, nothing to compile
 - Follows your Plasma theme (light and dark, Wayland and X11)
+- English and Indonesian
 - Talks to the `docker` CLI only; no extra services, no root (except to start the Docker service, via `pkexec`)
+
+![Running containers](docs/screenshots/running.png)
 
 ## Features
 
@@ -20,6 +23,25 @@ restart, read logs or open a shell without going to the terminal first.
 - **Health at a glance**: the status dot shows healthy, starting, unhealthy or failed containers.
 - **Search** across name, image, port and IP, in both tabs.
 - **Desktop notifications** when the Docker service stops or a container crashes or turns unhealthy.
+- **Pin** the containers you use most to the top of their tab.
+- **CPU and memory** of a running container when you rest the pointer on it.
+- **Optional confirmation** before Stop and Restart.
+- **Keyboard friendly**: type to search, arrows to move, Enter for the menu.
+
+## Screenshots
+
+| | | |
+| --- | --- | --- |
+| ![Running tab](docs/screenshots/running.png) | ![Stopped tab](docs/screenshots/stopped.png) | ![Right-click menu](docs/screenshots/menu.png) |
+| Running tab: health dots, ports, IPs, a pinned container | Stopped tab: the red ring marks an error exit | Right-click menu |
+| ![Search](docs/screenshots/search.png) | ![Confirm before stop](docs/screenshots/confirm.png) | ![No containers](docs/screenshots/empty.png) |
+| Search across both tabs | Asking before Stop | No containers yet |
+| ![Docker service stopped](docs/screenshots/service-stopped.png) | ![No permission](docs/screenshots/no-permission.png) | ![Indonesian](docs/screenshots/running-id.png) |
+| Docker service stopped | No permission to use Docker | In Indonesian |
+
+![Settings](docs/screenshots/settings.png)
+
+Screenshots use demo data; see *Development* to regenerate them.
 - **Helpful empty and error screens** that explain what is wrong and offer the fix.
 - **Settings** for the refresh interval and which details each row shows.
 
@@ -85,12 +107,17 @@ becomes a single line:
 Untagged images (`sha256:…`) are shortened to the 12-character ID, as `docker ps` does.
 Long names are cut with "…" only when the row is too narrow; there is no fixed limit.
 
+Pinned containers show a pin after the name and stay at the top of their tab.
+While the pointer rests on a running container, the status text changes to its
+CPU and memory use, e.g. "CPU 0.35% · RAM 42.1MiB" (sampled with `docker stats`
+at most every 10 seconds, only for the row under the pointer).
+
 | Click on | Does |
 | --- | --- |
 | Name | Copies the container name. It turns green briefly to confirm. |
 | `:port` | Opens `http://localhost:<port>` in your default browser. |
 | IP | Copies the IP address. It turns green briefly to confirm. |
-| ⟳ / ■ / ▶ | Restart, stop or start. A spinner shows while Docker works; errors appear under the row. |
+| ⟳ / ■ / ▶ | Restart, stop or start. A spinner shows while Docker works; errors appear under the row. With *Ask before Stop and Restart* on, the row first asks "Stop?" with ✓ and ✗ (it gives up after 6 seconds). |
 | Anywhere, right button | Opens the menu below. |
 
 Port ranges such as `80-81->80-81/tcp` are shown as separate ports (up to 10 per range).
@@ -113,6 +140,7 @@ Hover the dot to see what it means.
 | --- | --- |
 | Show logs | Opens a terminal with `docker logs -f --tail 200 <id>` |
 | Open shell | Running containers only: opens a terminal with `docker exec -it <id>`, using `bash` when available, otherwise `sh` |
+| Pin to top / Unpin | Keeps the container at the top of its tab (remembered by name, so it survives re-creating the container) |
 | Copy name / Copy ID / Copy IP address | Copies to the clipboard (ID is the short 12-character form) |
 | Restart / Stop / Start | Same as the row buttons |
 
@@ -130,6 +158,19 @@ popup opens, so you can just type.
 - `Esc` clears the search; a second `Esc` closes the popup.
 - The search is cleared each time the popup closes.
 - The panel badge and the header summary always count every container.
+
+### Keyboard
+
+| Key | Where | Does |
+| --- | --- | --- |
+| Any letter | Popup just opened, or in the list | Types into the search |
+| Down | Search field | Moves into the list |
+| Enter | Search field | Opens the menu of the first match |
+| Up / Down | List | Selects a container (Up on the first one goes back to the search) |
+| Enter, Space or Menu | List | Opens the selected container's menu |
+| Left / Right | List | Running / Stopped tab |
+| Esc | List | Back to the search field |
+| Esc | Search field | Clears the search, then closes the popup |
 
 ### Empty lists
 
@@ -187,6 +228,7 @@ Right-click the widget → *Configure Dermaga…*
 | --- | --- | --- |
 | Refresh interval (seconds) | 5 | How often the list refreshes while the popup is open (2–60). When closed, the badge refreshes once a minute. |
 | Show stopped containers | on | Turns the Stopped tab on or off |
+| Ask before Stop and Restart | off | The row asks "Stop?" / "Restart?" before doing it |
 | Show in each row: Image | on | Turning it off makes rows one line |
 | Show in each row: Status | on | Uptime or exit code, e.g. "Up 2 hours", "Exited (0) 3 days ago" |
 | Show in each row: Published ports | on | Running containers only |
@@ -230,8 +272,36 @@ Security:
     contents/ui/configGeneral.qml         settings page
     contents/config/main.xml              settings schema
     contents/icons/dermaga-symbolic.svg   panel icon (one colour, follows the theme)
-    contents/images/empty.svg             empty-list illustration (one colour, follows the theme)
+    contents/icons/dermaga-empty.svg      empty-list illustration (one colour, follows the theme)
+    contents/locale/                      compiled translations (built from translate/)
+    translate/                            translation template, .po files and build.sh
+    tools/screenshots/                    screenshot script, demo docker CLI and scenario driver
+    docs/screenshots/                     screenshots for this README and the KDE Store
     store-icon.svg                        colour logo for the store listing (not part of the package)
+
+Icon files are looked up by name by the icon theme as well, so give new ones a
+`dermaga-` prefix: a file called `empty.svg` shows the theme's "empty" icon instead.
+
+### Translations
+
+Strings are English in the code and wrapped in `i18n()`. To add or update a language:
+
+    sh translate/build.sh            # refresh translate/template.pot and compile every .po
+    cp translate/template.pot translate/<lang>.po   # start a new language, then translate it
+
+`build.sh` writes `contents/locale/<lang>/LC_MESSAGES/plasma_applet_com.adweb.dermaga.mo`.
+Test a language with `LANGUAGE=id plasmawindowed com.adweb.dermaga`.
+
+### Screenshots
+
+    sh tools/screenshots/take.sh             # all of them
+    sh tools/screenshots/take.sh menu        # one scenario
+
+The script installs a temporary copy of the widget, feeds it demo data through a
+fake `docker` command (so no real container names or IPs end up in the images),
+sets up each scenario, places the window on top without taking keyboard focus,
+and crops it from a full-screen capture. Needs KDE Plasma (KWin, Spectacle) and
+Python with Pillow; assumes a screen scale of 1.
 
 `docker.js` has no QML dependencies, so its parser can be tested with plain Node.js.
 

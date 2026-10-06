@@ -25,6 +25,15 @@ Item {
     required property string ip
     required property bool busy
     required property string errorText
+    required property bool pinned
+    required property int index
+
+    // "stop" | "restart" while waiting for the user to confirm, "" otherwise
+    property string pendingAction: ""
+
+    // CPU and memory, fetched after the pointer rests on a running row
+    readonly property var stat: widget.statsRevision >= 0 ? widget.stats[cid] : undefined
+    readonly property bool showStat: rowHover.hovered && isActive && stat !== undefined
 
     readonly property bool showPorts: widget.showPorts && isActive && ports !== ""
     readonly property bool showIp: widget.showIp && isActive && ip !== ""
@@ -98,15 +107,45 @@ Item {
     width: ListView.view ? ListView.view.width : implicitWidth
     implicitHeight: layout.implicitHeight + Kirigami.Units.smallSpacing * 2
 
-    // Light hover highlight so the row under the pointer is easy to follow
+    // Highlight for the row under the pointer, stronger for the keyboard selection
     Rectangle {
         anchors.fill: parent
         color: Kirigami.Theme.highlightColor
-        opacity: rowHover.hovered ? 0.1 : 0
+        opacity: row.ListView.isCurrentItem && row.ListView.view.activeFocus ? 0.25
+               : rowHover.hovered ? 0.1 : 0
     }
 
     HoverHandler {
         id: rowHover
+    }
+
+    // Fetch CPU and memory once the pointer has rested on the row for a moment
+    Timer {
+        interval: 600
+        running: rowHover.hovered && row.isActive
+        onTriggered: row.widget.fetchStats(row.cid)
+    }
+
+    // Stop and Restart go through here so they can ask first (see settings)
+    function requestAction(action) {
+        if (row.widget.confirmActions && action !== "start") {
+            pendingAction = action;
+        } else {
+            row.widget.runAction(action, cid);
+        }
+    }
+
+    function confirmAction() {
+        const action = pendingAction;
+        pendingAction = "";
+        row.widget.runAction(action, cid);
+    }
+
+    // An unanswered question goes away on its own
+    Timer {
+        interval: 6000
+        running: row.pendingAction !== ""
+        onTriggered: row.pendingAction = ""
     }
 
     // Right-click (or long press on touch) anywhere on the row opens the menu
@@ -120,13 +159,16 @@ Item {
         onLongPressed: row.openMenu()
     }
 
-    Keys.onMenuPressed: openMenu()
-
-    // The menu is created on demand so 40 rows do not each keep one alive
-    function openMenu() {
+    // The menu is created on demand so 40 rows do not each keep one alive.
+    // From the keyboard it opens under the row instead of at the pointer.
+    function openMenu(fromKeyboard) {
         const menu = menuComponent.createObject(row);
         menu.closed.connect(() => menu.destroy());
-        menu.popup();
+        if (fromKeyboard) {
+            menu.popup(row, Kirigami.Units.gridUnit * 2, row.height);
+        } else {
+            menu.popup();
+        }
     }
 
     Component {
@@ -145,6 +187,12 @@ Item {
                 text: i18n("Open shell")
                 icon.name: "utilities-terminal"
                 onTriggered: row.widget.openTerminal("shell", row.cid)
+            }
+
+            PlasmaComponents3.MenuItem {
+                text: row.pinned ? i18n("Unpin") : i18n("Pin to top")
+                icon.name: row.pinned ? "window-unpin" : "window-pin"
+                onTriggered: row.widget.togglePin(row.cname)
             }
 
             PlasmaComponents3.MenuSeparator {}
@@ -177,7 +225,7 @@ Item {
                 enabled: !row.busy
                 text: i18n("Restart")
                 icon.name: "system-reboot"
-                onTriggered: row.widget.runAction("restart", row.cid)
+                onTriggered: row.requestAction("restart")
             }
 
             PlasmaComponents3.MenuItem {
@@ -186,7 +234,7 @@ Item {
                 enabled: !row.busy
                 text: i18n("Stop")
                 icon.name: "media-playback-stop"
-                onTriggered: row.widget.runAction("stop", row.cid)
+                onTriggered: row.requestAction("stop")
             }
 
             PlasmaComponents3.MenuItem {
@@ -271,7 +319,9 @@ Item {
 
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        width: Math.min(implicitWidth, parent.width)
+                        // Leave room for the pin icon when the name has to elide
+                        width: Math.min(implicitWidth, parent.width
+                                        - (row.pinned ? Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing : 0))
                         text: row.cname
                         font.bold: true
                         // Turns green briefly after copying
@@ -294,15 +344,28 @@ Item {
                         QQC2.ToolTip.visible: nameHover.hovered
                         QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
                     }
+
+                    // Pinned to the top of the tab
+                    Kirigami.Icon {
+                        anchors.left: nameLabel.right
+                        anchors.leftMargin: Kirigami.Units.smallSpacing
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: Kirigami.Units.iconSizes.small
+                        height: width
+                        visible: row.pinned
+                        source: "window-pin"
+                        opacity: 0.6
+                    }
                 }
 
                 PortsAndIp {
                     visible: !row.widget.showImage
                 }
 
+                // Status text; while the pointer rests on a running row it shows CPU and memory
                 PlasmaComponents3.Label {
-                    visible: row.widget.showStatus
-                    text: row.statusText
+                    visible: row.widget.showStatus || row.showStat
+                    text: row.showStat ? i18n("CPU %1 · RAM %2", row.stat.cpu, row.stat.mem) : row.statusText
                     font: Kirigami.Theme.smallFont
                     opacity: 0.7
                     textFormat: Text.PlainText
@@ -343,6 +406,36 @@ Item {
             }
         }
 
+        // Inline question when "Ask before Stop and Restart" is on
+        PlasmaComponents3.Label {
+            visible: row.pendingAction !== "" && !row.busy
+            text: row.pendingAction === "stop" ? i18n("Stop?") : i18n("Restart?")
+            font: Kirigami.Theme.smallFont
+        }
+
+        PlasmaComponents3.ToolButton {
+            visible: row.pendingAction !== "" && !row.busy
+            icon.name: "dialog-ok-apply"
+            display: QQC2.AbstractButton.IconOnly
+            text: i18n("Yes")
+            onClicked: row.confirmAction()
+            Accessible.name: row.pendingAction === "stop" ? i18n("Stop %1", row.cname) : i18n("Restart %1", row.cname)
+            QQC2.ToolTip.text: i18n("Yes")
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+        }
+
+        PlasmaComponents3.ToolButton {
+            visible: row.pendingAction !== "" && !row.busy
+            icon.name: "dialog-cancel"
+            display: QQC2.AbstractButton.IconOnly
+            text: i18n("No")
+            onClicked: row.pendingAction = ""
+            QQC2.ToolTip.text: i18n("No")
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+        }
+
         PlasmaComponents3.BusyIndicator {
             visible: row.busy
             running: row.busy
@@ -351,11 +444,11 @@ Item {
         }
 
         PlasmaComponents3.ToolButton {
-            visible: !row.busy && row.isActive
+            visible: !row.busy && row.isActive && row.pendingAction === ""
             icon.name: "system-reboot"
             display: QQC2.AbstractButton.IconOnly
             text: i18n("Restart")
-            onClicked: row.widget.runAction("restart", row.cid)
+            onClicked: row.requestAction("restart")
             Accessible.name: i18n("Restart %1", row.cname)
             QQC2.ToolTip.text: i18n("Restart")
             QQC2.ToolTip.visible: hovered
@@ -363,11 +456,11 @@ Item {
         }
 
         PlasmaComponents3.ToolButton {
-            visible: !row.busy && row.isActive
+            visible: !row.busy && row.isActive && row.pendingAction === ""
             icon.name: "media-playback-stop"
             display: QQC2.AbstractButton.IconOnly
             text: i18n("Stop")
-            onClicked: row.widget.runAction("stop", row.cid)
+            onClicked: row.requestAction("stop")
             Accessible.name: i18n("Stop %1", row.cname)
             QQC2.ToolTip.text: i18n("Stop")
             QQC2.ToolTip.visible: hovered

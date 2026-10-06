@@ -85,6 +85,23 @@ function shortImage(image) {
     return m ? m[1] : (image || "");
 }
 
+// CPU and memory of one running container, sampled once (takes about 2 seconds).
+function statsCommand(id) {
+    if (!ID_PATTERN.test(id)) {
+        return "";
+    }
+    return "LC_ALL=C docker stats --no-stream --format '{{.CPUPerc}}|{{.MemUsage}}' " + id;
+}
+
+// "0.42%|85.2MiB / 15.5GiB" -> {cpu: "0.42%", mem: "85.2MiB"}, or null
+function parseStats(stdout) {
+    var parts = (stdout || "").trim().split("|");
+    if (parts.length < 2 || !parts[0]) {
+        return null;
+    }
+    return { cpu: parts[0].trim(), mem: parts[1].split("/")[0].trim() };
+}
+
 // Opens the user's terminal (Konsole unless another one is set in System Settings)
 // running `docker logs` or a shell inside the container. Detached with setsid so
 // the widget does not wait for the terminal to close. "" for an invalid ID.
@@ -213,7 +230,8 @@ function parse(stdout) {
             ports: active ? hostPorts(c.Ports) : "",
             ip: ips[c.ID] || "",
             busy: false,
-            errorText: ""
+            errorText: "",
+            pinned: false
         });
     });
 

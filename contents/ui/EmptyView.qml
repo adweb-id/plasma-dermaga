@@ -34,6 +34,7 @@ ColumnLayout {
         }
         return widget.showInactive ? "noneRunning" : "noneRunningHidden";
     }
+    readonly property url illustration: Qt.resolvedUrl("../icons/dermaga-empty.svg")
     readonly property bool exampleCopied: widget.lastCopied === Docker.EXAMPLE_RUN
 
     spacing: Kirigami.Units.largeSpacing
@@ -43,7 +44,7 @@ ColumnLayout {
         implicitWidth: Kirigami.Units.iconSizes.huge
         implicitHeight: Kirigami.Units.iconSizes.huge
         // A search with no results gets the search icon, an empty dock otherwise
-        source: empty.kind === "noMatch" ? "edit-find" : Qt.resolvedUrl("../images/empty.svg")
+        source: empty.kind === "noMatch" ? "edit-find" : empty.illustration.toString()
         isMask: empty.kind !== "noMatch"
         color: Kirigami.Theme.textColor
         opacity: 0.6

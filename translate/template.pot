@@ -1,0 +1,480 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the dermaga package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: dermaga\n"
+"Report-Msgid-Bugs-To: https://github.com/adweb-id/plasma-dermaga/issues\n"
+"POT-Creation-Date: 2026-10-06 16:00+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: contents/config/config.qml:6
+#, kde-format
+msgid "General"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:20
+#, kde-format
+msgid "Refresh interval (seconds):"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:27
+#, kde-format
+msgid "Containers:"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:28 contents/ui/EmptyView.qml:132
+#, kde-format
+msgid "Show stopped containers"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:33
+#, kde-format
+msgid "Ask before Stop and Restart"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:42
+#, kde-format
+msgid "Show in each row:"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:43
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:48
+#, kde-format
+msgid "Status (uptime or exit code)"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:53
+#, kde-format
+msgid "Published ports"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:58
+#, kde-format
+msgid "IP address"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:67
+#, kde-format
+msgid "Notify when:"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:68
+#, kde-format
+msgid "The Docker service stops or starts again"
+msgstr ""
+
+#: contents/ui/configGeneral.qml:73
+#, kde-format
+msgid "A container crashes or becomes unhealthy"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:68 contents/ui/ContainerDelegate.qml:69
+#, kde-format
+msgid "Open http://localhost:%1"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:100
+#, kde-format
+msgid "Copy IP address %1"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:101 contents/ui/ContainerDelegate.qml:343
+#: contents/ui/EmptyView.qml:125
+#, kde-format
+msgid "Copied"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:101
+#, kde-format
+msgid "Click to copy the IP address"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:179 contents/ui/main.qml:317
+#: contents/ui/main.qml:323
+#, kde-format
+msgid "Show logs"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:187
+#, kde-format
+msgid "Open shell"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:193
+#, kde-format
+msgid "Unpin"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:193
+#, kde-format
+msgid "Pin to top"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:201
+#, kde-format
+msgid "Copy name"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:207
+#, kde-format
+msgid "Copy ID"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:215
+#, kde-format
+msgid "Copy IP address"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:226 contents/ui/ContainerDelegate.qml:450
+#: contents/ui/ContainerDelegate.qml:453
+#, kde-format
+msgid "Restart"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:235 contents/ui/ContainerDelegate.qml:462
+#: contents/ui/ContainerDelegate.qml:465
+#, kde-format
+msgid "Stop"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:244 contents/ui/ContainerDelegate.qml:474
+#: contents/ui/ContainerDelegate.qml:477
+#, kde-format
+msgid "Start"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:298
+#, kde-format
+msgid "Running"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:299
+#, kde-format
+msgid "Starting, restarting or paused"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:300
+#, kde-format
+msgid "Running, but the health check fails"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:301
+#, kde-format
+msgid "Stopped with an error"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:302
+#, kde-format
+msgid "Stopped"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:342
+#, kde-format
+msgid "Copy name %1"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:343
+#, kde-format
+msgid "Click to copy the name, right-click for more"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:368
+#, kde-format
+msgid "CPU %1 · RAM %2"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:412
+#, kde-format
+msgid "Stop?"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:412
+#, kde-format
+msgid "Restart?"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:420 contents/ui/ContainerDelegate.qml:423
+#, kde-format
+msgid "Yes"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:422 contents/ui/ContainerDelegate.qml:464
+#, kde-format
+msgid "Stop %1"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:422 contents/ui/ContainerDelegate.qml:452
+#, kde-format
+msgid "Restart %1"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:432 contents/ui/ContainerDelegate.qml:434
+#, kde-format
+msgid "No"
+msgstr ""
+
+#: contents/ui/ContainerDelegate.qml:476
+#, kde-format
+msgid "Start %1"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:60
+#, kde-format
+msgid "No containers yet"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:61
+#, kde-format
+msgid "No matching containers"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:62
+#, kde-format
+msgid "No stopped containers"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:63
+#, kde-format
+msgid "No running containers"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:76
+#, kde-format
+msgid ""
+"Docker is running, but there are no containers on this machine. Create one, "
+"for example:"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:80
+#, kde-format
+msgid "Nothing stopped matches “%2”, but %1 running container does."
+msgid_plural "Nothing stopped matches “%2”, but %1 running containers do."
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/EmptyView.qml:83
+#, kde-format
+msgid "Nothing running matches “%2”, but %1 stopped container does."
+msgid_plural "Nothing running matches “%2”, but %1 stopped containers do."
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/EmptyView.qml:87
+#, kde-format
+msgid "No container name, image, port or IP contains “%1”."
+msgstr ""
+
+#: contents/ui/EmptyView.qml:89
+#, kde-format
+msgid "The only container is running."
+msgid_plural "All %1 containers are running."
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/EmptyView.qml:91
+#, kde-format
+msgid "%1 stopped container is ready to start."
+msgid_plural "%1 stopped containers are ready to start."
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/EmptyView.qml:94
+#, kde-format
+msgid "%1 stopped container is hidden by the settings."
+msgid_plural "%1 stopped containers are hidden by the settings."
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/EmptyView.qml:125 contents/ui/WarningView.qml:57
+#, kde-format
+msgid "Copy command"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:128
+#, kde-format
+msgid "Clear search"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:130
+#, kde-format
+msgid "Show running matches"
+msgstr ""
+
+#: contents/ui/EmptyView.qml:130
+#, kde-format
+msgid "Show stopped matches"
+msgstr ""
+
+#: contents/ui/FullRepresentation.qml:40 contents/ui/main.qml:61
+#, kde-format
+msgid "Dermaga"
+msgstr ""
+
+#: contents/ui/FullRepresentation.qml:56 contents/ui/FullRepresentation.qml:57
+#, kde-format
+msgid "Refresh"
+msgstr ""
+
+#: contents/ui/FullRepresentation.qml:68
+#, kde-format
+msgid "Search name, image, port or IP…"
+msgstr ""
+
+#: contents/ui/FullRepresentation.qml:92
+#, kde-format
+msgid "Running (%1)"
+msgstr ""
+
+#: contents/ui/FullRepresentation.qml:96
+#, kde-format
+msgid "Stopped (%1)"
+msgstr ""
+
+#: contents/ui/main.qml:51
+#, kde-format
+msgid "Loading…"
+msgstr ""
+
+#: contents/ui/main.qml:52
+#, kde-format
+msgid "%1 running · %2 stopped"
+msgstr ""
+
+#: contents/ui/main.qml:53
+#, kde-format
+msgid "Not installed"
+msgstr ""
+
+#: contents/ui/main.qml:54
+#, kde-format
+msgid "Permission denied"
+msgstr ""
+
+#: contents/ui/main.qml:55
+#, kde-format
+msgid "Service stopped"
+msgstr ""
+
+#: contents/ui/main.qml:56
+#, kde-format
+msgid "Error"
+msgstr ""
+
+#: contents/ui/main.qml:274
+#, kde-format
+msgid "Docker service stopped"
+msgstr ""
+
+#: contents/ui/main.qml:275
+#, kde-format
+msgid "Containers cannot be listed until the Docker service runs again."
+msgstr ""
+
+#: contents/ui/main.qml:276 contents/ui/WarningView.qml:58
+#, kde-format
+msgid "Start Docker"
+msgstr ""
+
+#: contents/ui/main.qml:278
+#, kde-format
+msgid "Docker is unavailable"
+msgstr ""
+
+#: contents/ui/main.qml:283
+#, kde-format
+msgid "Docker is running again"
+msgstr ""
+
+#: contents/ui/main.qml:313
+#, kde-format
+msgid "%1 stopped with an error"
+msgstr ""
+
+#: contents/ui/main.qml:314
+#, kde-format
+msgid "%1 container stopped with an error"
+msgid_plural "%1 containers stopped with an error"
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/main.qml:319
+#, kde-format
+msgid "%1 is unhealthy"
+msgstr ""
+
+#: contents/ui/main.qml:320
+#, kde-format
+msgid "%1 container is unhealthy"
+msgid_plural "%1 containers are unhealthy"
+msgstr[0] ""
+msgstr[1] ""
+
+#: contents/ui/main.qml:321
+#, kde-format
+msgid "Its health check is failing."
+msgstr ""
+
+#: contents/ui/WarningView.qml:25
+#, kde-format
+msgid "Docker is not installed"
+msgstr ""
+
+#: contents/ui/WarningView.qml:26
+#, kde-format
+msgid "No permission to use Docker"
+msgstr ""
+
+#: contents/ui/WarningView.qml:27
+#, kde-format
+msgid "Docker service is not running"
+msgstr ""
+
+#: contents/ui/WarningView.qml:28
+#, kde-format
+msgid "Docker returned an error"
+msgstr ""
+
+#: contents/ui/WarningView.qml:35
+#, kde-format
+msgid "The docker command was not found on this system."
+msgstr ""
+
+#: contents/ui/WarningView.qml:37
+#, kde-format
+msgid ""
+"Your user is not in the docker group. Run this command, then log out and "
+"back in:\n"
+"%1"
+msgstr ""
+
+#: contents/ui/WarningView.qml:39
+#, kde-format
+msgid ""
+"The Docker daemon is stopped, so containers cannot be listed. You will be "
+"asked for your password."
+msgstr ""
+
+#: contents/ui/WarningView.qml:56
+#, kde-format
+msgid "Open install guide"
+msgstr ""
+
+#: contents/ui/WarningView.qml:59
+#, kde-format
+msgid "Try again"
+msgstr ""
