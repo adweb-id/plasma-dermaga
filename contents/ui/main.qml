@@ -66,7 +66,6 @@ PlasmoidItem {
     Plasmoid.contextualActions: [
         PlasmaCore.Action {
             text: i18n("Show stopped containers")
-            icon.name: "view-visible"
             checkable: true
             checked: Plasmoid.configuration.showInactive
             onTriggered: Plasmoid.configuration.showInactive = checked
