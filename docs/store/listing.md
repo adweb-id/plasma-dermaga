@@ -33,7 +33,7 @@ Dermaga shows your Docker containers right in the Plasma panel. Check what is ru
 Features
 - Panel icon with the number of running containers, or "!" when Docker cannot be used
 - Running and Stopped tabs with compact one- or two-line rows: name, status, image, ports, IP
-- Start, stop and restart from each row, with an optional "Stop?" confirmation
+- Start, stop and restart from each row, with a "Stop?" confirmation you can turn off
 - Click a port to open http://localhost:<port>; click the name or IP to copy it
 - Right-click a container: show logs, open a shell, pin to top, copy name / ID / IP
 - Status dot shows healthy, starting, unhealthy and crashed containers
