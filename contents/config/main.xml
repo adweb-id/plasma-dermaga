@@ -14,7 +14,7 @@
       <default>true</default>
     </entry>
     <entry name="confirmActions" type="Bool">
-      <default>false</default>
+      <default>true</default>
     </entry>
     <!-- Names of containers pinned to the top of their tab -->
     <entry name="pinned" type="StringList">

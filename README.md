@@ -25,7 +25,7 @@ restart, read logs or open a shell without going to the terminal first.
 - **Desktop notifications** when the Docker service stops or a container crashes or turns unhealthy.
 - **Pin** the containers you use most to the top of their tab.
 - **CPU and memory** of a running container when you rest the pointer on it.
-- **Optional confirmation** before Stop and Restart.
+- **Confirmation** before Stop and Restart (can be turned off).
 - **Keyboard friendly**: type to search, arrows to move, Enter for the menu.
 
 ## Screenshots
@@ -117,7 +117,7 @@ at most every 10 seconds, only for the row under the pointer).
 | Name | Copies the container name. It turns green briefly to confirm. |
 | `:port` | Opens `http://localhost:<port>` in your default browser. |
 | IP | Copies the IP address. It turns green briefly to confirm. |
-| ⟳ / ■ / ▶ | Restart, stop or start. A spinner shows while Docker works; errors appear under the row. With *Ask before Stop and Restart* on, the row first asks "Stop?" with ✓ and ✗ (it gives up after 6 seconds). |
+| ⟳ / ■ / ▶ | Restart, stop or start. A spinner shows while Docker works; errors appear under the row. Unless *Ask before Stop and Restart* is turned off, the row first asks "Stop?" with ✓ and ✗ (it gives up after 6 seconds). |
 | Anywhere, right button | Opens the menu below. |
 
 Port ranges such as `80-81->80-81/tcp` are shown as separate ports (up to 10 per range).
@@ -228,7 +228,7 @@ Right-click the widget → *Configure Dermaga…*
 | --- | --- | --- |
 | Refresh interval (seconds) | 5 | How often the list refreshes while the popup is open (2–60). When closed, the badge refreshes once a minute. |
 | Show stopped containers | on | Turns the Stopped tab on or off |
-| Ask before Stop and Restart | off | The row asks "Stop?" / "Restart?" before doing it |
+| Ask before Stop and Restart | on | The row asks "Stop?" / "Restart?" before doing it |
 | Show in each row: Image | on | Turning it off makes rows one line |
 | Show in each row: Status | on | Uptime or exit code, e.g. "Up 2 hours", "Exited (0) 3 days ago" |
 | Show in each row: Published ports | on | Running containers only |
