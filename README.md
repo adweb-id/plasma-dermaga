@@ -91,6 +91,8 @@ After an update, restart Plasma to load the new code:
 | `!` | Docker cannot be used: not installed, no permission, or the service is stopped. Hover for the reason, click for the fix. |
 
 Hover the icon for a summary such as "6 running · 35 stopped".
+Right-click the icon for **Show stopped containers**, a check box that turns the
+Stopped tab on or off without opening the settings.
 
 ### The container row
 

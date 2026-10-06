@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.notification
 
@@ -60,6 +61,17 @@ PlasmoidItem {
     Plasmoid.icon: iconSource
     toolTipMainText: i18n("Dermaga")
     toolTipSubText: summaryText
+
+    // Extra entries in the widget's own right-click menu (next to "Configure Dermaga…")
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: i18n("Show stopped containers")
+            icon.name: "view-visible"
+            checkable: true
+            checked: Plasmoid.configuration.showInactive
+            onTriggered: Plasmoid.configuration.showInactive = checked
+        }
+    ]
 
     compactRepresentation: CompactRepresentation { widget: root }
     fullRepresentation: FullRepresentation { widget: root }
