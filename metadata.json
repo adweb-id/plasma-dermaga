@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "ADWeb",
+                "Email": "hello@addin.web.id"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "Docker containers in your panel: list, start, stop and restart",
+        "Icon": "server-database",
+        "Id": "com.adweb.dermaga",
+        "License": "GPL-3.0-or-later",
+        "Name": "Dermaga",
+        "Version": "0.1.0",
+        "Website": "https://github.com/adweb-id/plasma-dermaga"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
