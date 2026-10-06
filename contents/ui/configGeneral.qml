@@ -10,6 +10,8 @@ KCM.SimpleKCM {
     property alias cfg_showStatus: statusCheck.checked
     property alias cfg_showPorts: portsCheck.checked
     property alias cfg_showIp: ipCheck.checked
+    property alias cfg_notifyDocker: notifyDockerCheck.checked
+    property alias cfg_notifyContainers: notifyContainersCheck.checked
 
     Kirigami.FormLayout {
         QQC2.SpinBox {
@@ -48,6 +50,21 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: ipCheck
             text: i18n("IP address")
+        }
+
+        Item {
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.CheckBox {
+            id: notifyDockerCheck
+            Kirigami.FormData.label: i18n("Notify when:")
+            text: i18n("The Docker service stops or starts again")
+        }
+
+        QQC2.CheckBox {
+            id: notifyContainersCheck
+            text: i18n("A container crashes or becomes unhealthy")
         }
     }
 }

@@ -130,6 +130,43 @@ function health(state, statusText) {
     return exit && exit[1] !== "0" ? "failed" : "stopped";
 }
 
+// --- Desktop notifications --------------------------------------------------
+
+// Exit codes that mean "asked to stop" (Ctrl+C, SIGTERM), not a crash
+var CLEAN_EXIT_CODES = ["0", "130", "143"];
+
+// What notifications compare between two refreshes: cid -> {name, isActive, health, status}
+function snapshot(list) {
+    var map = {};
+    list.forEach(function (c) {
+        map[c.cid] = { name: c.cname, isActive: c.isActive, health: c.health, status: c.statusText };
+    });
+    return map;
+}
+
+// Changes since the previous refresh that are worth a notification:
+//   crashed:   was running, now stopped with an error exit code (or dead)
+//   unhealthy: health check started failing
+// Containers listed in `ignore` (ids the user just acted on) are skipped.
+function containerEvents(prev, list, ignore) {
+    var events = [];
+    list.forEach(function (c) {
+        var p = prev[c.cid];
+        if (!p || (ignore && ignore[c.cid])) {
+            return;
+        }
+        if (p.isActive && !c.isActive && c.health === "failed") {
+            var exit = /exited \((\d+)\)/i.exec(c.statusText || "");
+            if (!exit || CLEAN_EXIT_CODES.indexOf(exit[1]) === -1) {
+                events.push({ kind: "crashed", cid: c.cid, name: c.cname, status: c.statusText });
+            }
+        } else if (c.health === "unhealthy" && p.health !== "unhealthy") {
+            events.push({ kind: "unhealthy", cid: c.cid, name: c.cname, status: c.statusText });
+        }
+    });
+    return events;
+}
+
 // Case-insensitive match of the search text against name, image, ports and IP.
 function matches(c, query) {
     var q = (query || "").trim().toLowerCase();

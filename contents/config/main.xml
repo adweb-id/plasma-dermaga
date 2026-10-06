@@ -13,6 +13,13 @@
     <entry name="showInactive" type="Bool">
       <default>true</default>
     </entry>
+    <!-- Desktop notifications -->
+    <entry name="notifyDocker" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyContainers" type="Bool">
+      <default>true</default>
+    </entry>
     <!-- Which details each container row shows -->
     <entry name="showImage" type="Bool">
       <default>true</default>

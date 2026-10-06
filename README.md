@@ -19,6 +19,7 @@ restart, read logs or open a shell without going to the terminal first.
 - **Right-click menu**: show logs, open a shell, copy name / ID / IP, start / stop / restart.
 - **Health at a glance**: the status dot shows healthy, starting, unhealthy or failed containers.
 - **Search** across name, image, port and IP, in both tabs.
+- **Desktop notifications** when the Docker service stops or a container crashes or turns unhealthy.
 - **Helpful empty and error screens** that explain what is wrong and offer the fix.
 - **Settings** for the refresh interval and which details each row shows.
 
@@ -155,6 +156,29 @@ The checks run in this order on every refresh:
 | Docker service is stopped | Docker answers "Cannot connect to the Docker daemon" | *Start Docker*: runs `pkexec systemctl start docker` (asks for your password) |
 | Any other error | Docker exits with an error | Shows Docker's message and a *Try again* button |
 
+### Desktop notifications
+
+Dermaga checks Docker once a minute while the popup is closed (and every few
+seconds while it is open) and sends a notification only for things you did not
+do yourself:
+
+| Event | Notification | Button |
+| --- | --- | --- |
+| The Docker service stops (it was running) | "Docker service stopped" | Start Docker |
+| Docker works again after that | "Docker is running again" | none |
+| A running container stops with an error exit code, or dies | "<name> stopped with an error", with its status, e.g. "Exited (137)…" | Show logs |
+| A container's health check starts failing | "<name> is unhealthy" | Show logs |
+
+To stay quiet:
+
+- Nothing is sent right after login or after the widget loads; it only reports changes.
+- Containers you started, stopped or restarted from the widget in the last 60 seconds are ignored.
+- Exit codes 0, 130 (Ctrl+C) and 143 (SIGTERM) count as a normal stop.
+- Several containers changing at once give one notification per kind, listing their names.
+- No "running again" message right after you pressed *Start Docker* yourself.
+
+Both kinds can be turned off in the settings.
+
 ## Settings
 
 Right-click the widget → *Configure Dermaga…*
@@ -167,6 +191,8 @@ Right-click the widget → *Configure Dermaga…*
 | Show in each row: Status | on | Uptime or exit code, e.g. "Up 2 hours", "Exited (0) 3 days ago" |
 | Show in each row: Published ports | on | Running containers only |
 | Show in each row: IP address | on | Running containers only |
+| Notify when: the Docker service stops or starts again | on | See *Desktop notifications* |
+| Notify when: a container crashes or becomes unhealthy | on | See *Desktop notifications* |
 
 ## How it works
 
@@ -194,8 +220,8 @@ Security:
 
 ## Development
 
-    contents/ui/main.qml                  state, timer, command execution, search filter
-    contents/ui/docker.js                 commands, parser, error and health detection
+    contents/ui/main.qml                  state, timer, command execution, search filter, notifications
+    contents/ui/docker.js                 commands, parser, error/health detection, notification events
     contents/ui/CompactRepresentation.qml panel icon + badge
     contents/ui/FullRepresentation.qml    popup: header, search, tabs, list
     contents/ui/ContainerDelegate.qml     one container row and its right-click menu

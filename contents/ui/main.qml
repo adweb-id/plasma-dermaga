@@ -1,6 +1,7 @@
 import QtQuick
 import org.kde.plasma.plasmoid
 import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.notification
 
 import "docker.js" as Docker
 
@@ -101,11 +102,14 @@ PlasmoidItem {
         exec(Docker.listCommand(), (stdout, stderr, exitCode) => {
             refreshing = false;
             const next = Docker.classify(exitCode, stderr);
+            notifyDockerChange(dockerState, next, stderr.trim());
             if (next === "ready") {
                 lastList = Docker.parse(stdout);
+                notifyContainerChanges(lastList);
                 syncModel(lastList);
                 errorText = "";
             } else {
+                containerSnapshot = null; // compare afresh once Docker is back
                 lastList = [];
                 activeModel.clear();
                 inactiveModel.clear();
@@ -175,6 +179,7 @@ PlasmoidItem {
         }
         busyIds[id] = true;
         actionErrors[id] = "";
+        userActionAt[id] = Date.now(); // the user did this, so no "stopped" notification
         setRow(id, { busy: true, errorText: "" });
 
         exec(command, (stdout, stderr, exitCode) => {
@@ -194,7 +199,114 @@ PlasmoidItem {
     }
 
     function startService() {
+        serviceStartedAt = Date.now();
         exec(Docker.START_SERVICE, () => refresh());
+    }
+
+    // --- Desktop notifications ---------------------------------------------
+
+    // Containers as seen on the previous refresh; null until there is one to compare with
+    property var containerSnapshot: null
+    // cid -> time the user started/stopped/restarted it from the widget
+    property var userActionAt: ({})
+    // Time the user pressed "Start Docker", to skip the redundant "running again" message
+    property double serviceStartedAt: 0
+    // Set once a "Docker unavailable" notification went out, so recovery is reported too
+    property bool dockerDownNotified: false
+
+    readonly property int quietPeriod: 60000 // ms after a user action
+
+    function notifyDockerChange(previous, next, stderr) {
+        if (!Plasmoid.configuration.notifyDocker) {
+            return;
+        }
+        if (previous === "ready" && next !== "ready") {
+            dockerDownNotified = true;
+            if (next === "daemonDown") {
+                notify(i18n("Docker service stopped"),
+                       i18n("Containers cannot be listed until the Docker service runs again."),
+                       "dialog-warning", i18n("Start Docker"), () => startService());
+            } else {
+                notify(i18n("Docker is unavailable"), stderr || summaryText, "dialog-warning");
+            }
+        } else if (previous !== "ready" && previous !== "loading" && next === "ready" && dockerDownNotified) {
+            dockerDownNotified = false;
+            if (Date.now() - serviceStartedAt > quietPeriod) {
+                notify(i18n("Docker is running again"), "", "dialog-information");
+            }
+        }
+    }
+
+    function notifyContainerChanges(list) {
+        const previous = containerSnapshot;
+        containerSnapshot = Docker.snapshot(list);
+        if (!previous || !Plasmoid.configuration.notifyContainers) {
+            return;
+        }
+        const now = Date.now();
+        const ignore = {};
+        for (const id in userActionAt) {
+            if (now - userActionAt[id] < quietPeriod) {
+                ignore[id] = true;
+            } else {
+                delete userActionAt[id];
+            }
+        }
+        const events = Docker.containerEvents(previous, list, ignore);
+        for (const kind of ["crashed", "unhealthy"]) {
+            const group = events.filter(e => e.kind === kind);
+            if (group.length === 0) {
+                continue;
+            }
+            // One notification per kind; with a single container it gets a "Show logs" button
+            const one = group.length === 1 ? group[0] : null;
+            const names = group.map(e => e.name).join(", ");
+            if (kind === "crashed") {
+                notify(one ? i18n("%1 stopped with an error", one.name)
+                           : i18np("%1 container stopped with an error", "%1 containers stopped with an error", group.length),
+                       one ? one.status : names,
+                       "dialog-error",
+                       one ? i18n("Show logs") : "", one ? () => openTerminal("logs", one.cid) : null);
+            } else {
+                notify(one ? i18n("%1 is unhealthy", one.name)
+                           : i18np("%1 container is unhealthy", "%1 containers are unhealthy", group.length),
+                       one ? i18n("Its health check is failing.") : names,
+                       "dialog-warning",
+                       one ? i18n("Show logs") : "", one ? () => openTerminal("logs", one.cid) : null);
+            }
+        }
+    }
+
+    // Sends one desktop notification, optionally with a single action button
+    function notify(title, text, icon, actionLabel, onAction) {
+        const n = notificationComponent.createObject(root, {
+            title: title,
+            text: text,
+            iconName: icon
+        });
+        if (actionLabel && onAction) {
+            const action = actionComponent.createObject(n, { label: actionLabel });
+            action.activated.connect(onAction);
+            n.actions = [action];
+        }
+        n.closed.connect(() => n.destroy());
+        n.sendEvent();
+    }
+
+    Component {
+        id: notificationComponent
+
+        Notification {
+            componentName: "plasma_workspace"
+            eventId: "notification"
+            autoDelete: false // QML owns it; destroyed when closed
+        }
+    }
+
+    Component {
+        id: actionComponent
+
+        NotificationAction {}
     }
 
     function openGuide() {
