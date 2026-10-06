@@ -64,11 +64,12 @@ PlasmoidItem {
 
     // Extra entries in the widget's own right-click menu (next to "Configure Dermaga…")
     Plasmoid.contextualActions: [
+        // A check mark in the icon column instead of a separate check box,
+        // so the entry lines up with the other menu items
         PlasmaCore.Action {
             text: i18n("Show stopped containers")
-            checkable: true
-            checked: Plasmoid.configuration.showInactive
-            onTriggered: Plasmoid.configuration.showInactive = checked
+            icon.name: Plasmoid.configuration.showInactive ? "checkmark" : ""
+            onTriggered: Plasmoid.configuration.showInactive = !Plasmoid.configuration.showInactive
         }
     ]
 
