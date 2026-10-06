@@ -1,4 +1,4 @@
-# Dermaga – Docker Containers
+# Dermaga Docker Containers
 
 A KDE Plasma 6 widget that shows your Docker containers in the panel. Start, stop,
 restart, read logs or open a shell without going to the terminal first.

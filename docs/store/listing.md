@@ -6,7 +6,7 @@ Text and files for the product page on store.kde.org. Copy each field as is.
 
 | Field | Value |
 | --- | --- |
-| Title | Dermaga – Docker Containers |
+| Title | Dermaga Docker Containers |
 | Category | Plasma 6 Widgets |
 | License | GPL-3.0-or-later |
 | Source / Homepage | https://github.com/adweb-id/plasma-dermaga |
