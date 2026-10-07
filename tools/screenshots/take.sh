@@ -29,6 +29,7 @@ confirm|normal|Dermaga|440|600|en
 empty|empty|Dermaga|440|520|en
 service-stopped|down|Dermaga|440|520|en
 no-permission|noperm|Dermaga|440|520|en
+about|normal|Dermaga|440|600|en
 settings|normal|Dermaga Settings|760|680|en
 running-id|normal|Dermaga|440|600|id'
 

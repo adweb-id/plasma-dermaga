@@ -38,6 +38,8 @@ restart, read logs or open a shell without going to the terminal first.
 | Search across both tabs | Asking before Stop | No containers yet |
 | ![Docker service stopped](docs/screenshots/service-stopped.png) | ![No permission](docs/screenshots/no-permission.png) | ![Indonesian](docs/screenshots/running-id.png) |
 | Docker service stopped | No permission to use Docker | In Indonesian |
+| ![About](docs/screenshots/about.png) | | |
+| About Dermaga | | |
 
 ![Settings](docs/screenshots/settings.png)
 
@@ -91,8 +93,10 @@ After an update, restart Plasma to load the new code:
 | `!` | Docker cannot be used: not installed, no permission, or the service is stopped. Hover for the reason, click for the fix. |
 
 Hover the icon for a summary such as "6 running · 35 stopped".
-Right-click the icon for **Show stopped containers**, a check box that turns the
-Stopped tab on or off without opening the settings.
+Right-click the icon for:
+
+- **Show stopped containers**: turns the Stopped tab on or off without opening the settings (a check mark shows it is on).
+- **About Dermaga**: version, author, license, and buttons for the source code and bug reports.
 
 ### The container row
 
@@ -271,10 +275,12 @@ Security:
     contents/ui/ContainerDelegate.qml     one container row and its right-click menu
     contents/ui/EmptyView.qml             empty list: why it is empty and what to do next
     contents/ui/WarningView.qml           not installed / no permission / service stopped
+    contents/ui/AboutView.qml             About page (name, version and links from metadata.json)
     contents/ui/configGeneral.qml         settings page
     contents/config/main.xml              settings schema
     contents/icons/dermaga-symbolic.svg   panel icon (one colour, follows the theme)
     contents/icons/dermaga-empty.svg      empty-list illustration (one colour, follows the theme)
+    contents/icons/dermaga-logo.svg       colour logo for the About page
     contents/locale/                      compiled translations (built from translate/)
     translate/                            translation template, .po files and build.sh
     tools/screenshots/                    screenshot script, demo docker CLI and scenario driver

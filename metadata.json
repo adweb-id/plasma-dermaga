@@ -7,8 +7,10 @@
                 "Email": "hello@addin.web.id"
             }
         ],
+        "BugReportUrl": "https://github.com/adweb-id/plasma-dermaga/issues",
         "Category": "System Information",
-        "Description": "Docker containers in your panel: list, start, stop and restart",
+        "Copyright": "© 2026 ADWeb",
+        "Description": "Docker containers in your panel: start, stop, restart, logs and shell",
         "Icon": "server-database",
         "Id": "com.adweb.dermaga",
         "License": "GPL-3.0-or-later",

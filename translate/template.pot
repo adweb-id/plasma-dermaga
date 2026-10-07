@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dermaga\n"
 "Report-Msgid-Bugs-To: https://github.com/adweb-id/plasma-dermaga/issues\n"
-"POT-Creation-Date: 2026-10-06 16:15+0700\n"
+"POT-Creation-Date: 2026-10-07 08:23+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,31 @@ msgstr ""
 msgid "General"
 msgstr ""
 
+#: contents/ui/AboutView.qml:39
+#, kde-format
+msgid "Version %1"
+msgstr ""
+
+#: contents/ui/AboutView.qml:57
+#, kde-format
+msgid "%1 · License %2"
+msgstr ""
+
+#: contents/ui/AboutView.qml:66
+#, kde-format
+msgid "Source code"
+msgstr ""
+
+#: contents/ui/AboutView.qml:72
+#, kde-format
+msgid "Report a bug"
+msgstr ""
+
+#: contents/ui/AboutView.qml:81
+#, kde-format
+msgid "Back"
+msgstr ""
+
 #: contents/ui/configGeneral.qml:20
 #, kde-format
 msgid "Refresh interval (seconds):"
@@ -34,7 +59,7 @@ msgid "Containers:"
 msgstr ""
 
 #: contents/ui/configGeneral.qml:28 contents/ui/EmptyView.qml:133
-#: contents/ui/main.qml:68
+#: contents/ui/main.qml:73
 #, kde-format
 msgid "Show stopped containers"
 msgstr ""
@@ -105,8 +130,8 @@ msgstr ""
 msgid "Click to copy the IP address"
 msgstr ""
 
-#: contents/ui/ContainerDelegate.qml:179 contents/ui/main.qml:329
-#: contents/ui/main.qml:335
+#: contents/ui/ContainerDelegate.qml:179 contents/ui/main.qml:340
+#: contents/ui/main.qml:346
 #, kde-format
 msgid "Show logs"
 msgstr ""
@@ -321,111 +346,116 @@ msgstr ""
 msgid "Show stopped matches"
 msgstr ""
 
-#: contents/ui/FullRepresentation.qml:40 contents/ui/main.qml:62
+#: contents/ui/FullRepresentation.qml:41 contents/ui/main.qml:65
 #, kde-format
 msgid "Dermaga"
 msgstr ""
 
-#: contents/ui/FullRepresentation.qml:56 contents/ui/FullRepresentation.qml:57
+#: contents/ui/FullRepresentation.qml:57 contents/ui/FullRepresentation.qml:58
 #, kde-format
 msgid "Refresh"
 msgstr ""
 
-#: contents/ui/FullRepresentation.qml:68
+#: contents/ui/FullRepresentation.qml:69
 #, kde-format
 msgid "Search name, image, port or IP…"
 msgstr ""
 
-#: contents/ui/FullRepresentation.qml:92
+#: contents/ui/FullRepresentation.qml:93
 #, kde-format
 msgid "Running (%1)"
 msgstr ""
 
-#: contents/ui/FullRepresentation.qml:96
+#: contents/ui/FullRepresentation.qml:97
 #, kde-format
 msgid "Stopped (%1)"
 msgstr ""
 
-#: contents/ui/main.qml:52
+#: contents/ui/main.qml:55
 #, kde-format
 msgid "Loading…"
 msgstr ""
 
-#: contents/ui/main.qml:53
+#: contents/ui/main.qml:56
 #, kde-format
 msgid "%1 running · %2 stopped"
 msgstr ""
 
-#: contents/ui/main.qml:54
+#: contents/ui/main.qml:57
 #, kde-format
 msgid "Not installed"
 msgstr ""
 
-#: contents/ui/main.qml:55
+#: contents/ui/main.qml:58
 #, kde-format
 msgid "Permission denied"
 msgstr ""
 
-#: contents/ui/main.qml:56
+#: contents/ui/main.qml:59
 #, kde-format
 msgid "Service stopped"
 msgstr ""
 
-#: contents/ui/main.qml:57
+#: contents/ui/main.qml:60
 #, kde-format
 msgid "Error"
 msgstr ""
 
-#: contents/ui/main.qml:286
+#: contents/ui/main.qml:78
+#, kde-format
+msgid "About Dermaga"
+msgstr ""
+
+#: contents/ui/main.qml:297
 #, kde-format
 msgid "Docker service stopped"
 msgstr ""
 
-#: contents/ui/main.qml:287
+#: contents/ui/main.qml:298
 #, kde-format
 msgid "Containers cannot be listed until the Docker service runs again."
 msgstr ""
 
-#: contents/ui/main.qml:288 contents/ui/WarningView.qml:58
+#: contents/ui/main.qml:299 contents/ui/WarningView.qml:58
 #, kde-format
 msgid "Start Docker"
 msgstr ""
 
-#: contents/ui/main.qml:290
+#: contents/ui/main.qml:301
 #, kde-format
 msgid "Docker is unavailable"
 msgstr ""
 
-#: contents/ui/main.qml:295
+#: contents/ui/main.qml:306
 #, kde-format
 msgid "Docker is running again"
 msgstr ""
 
-#: contents/ui/main.qml:325
+#: contents/ui/main.qml:336
 #, kde-format
 msgid "%1 stopped with an error"
 msgstr ""
 
-#: contents/ui/main.qml:326
+#: contents/ui/main.qml:337
 #, kde-format
 msgid "%1 container stopped with an error"
 msgid_plural "%1 containers stopped with an error"
 msgstr[0] ""
 msgstr[1] ""
 
-#: contents/ui/main.qml:331
+#: contents/ui/main.qml:342
 #, kde-format
 msgid "%1 is unhealthy"
 msgstr ""
 
-#: contents/ui/main.qml:332
+#: contents/ui/main.qml:343
 #, kde-format
 msgid "%1 container is unhealthy"
 msgid_plural "%1 containers are unhealthy"
 msgstr[0] ""
 msgstr[1] ""
 
-#: contents/ui/main.qml:333
+#: contents/ui/main.qml:344
 #, kde-format
 msgid "Its health check is failing."
 msgstr ""

@@ -28,6 +28,9 @@ PlasmoidItem {
     property var busyIds: ({})
     property var actionErrors: ({})
 
+    // The popup shows the About page instead of the list (from the panel icon's menu)
+    property bool showAbout: false
+
     // Text copied most recently; rows use it to show a short "Copied" confirmation
     property string lastCopied: ""
 
@@ -70,6 +73,14 @@ PlasmoidItem {
             text: i18n("Show stopped containers")
             icon.name: Plasmoid.configuration.showInactive ? "checkmark" : ""
             onTriggered: Plasmoid.configuration.showInactive = !Plasmoid.configuration.showInactive
+        },
+        PlasmaCore.Action {
+            text: i18n("About Dermaga")
+            icon.name: "help-about"
+            onTriggered: {
+                root.showAbout = true;
+                root.expanded = true;
+            }
         }
     ]
 
@@ -419,6 +430,7 @@ PlasmoidItem {
             refresh();
         } else {
             searchText = ""; // start fresh next time the popup opens
+            showAbout = false;
         }
     }
 }

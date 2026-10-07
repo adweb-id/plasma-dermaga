@@ -10,7 +10,8 @@ PlasmaExtras.Representation {
 
     required property var widget
 
-    readonly property bool ready: widget.dockerState === "ready"
+    // The About page hides the search, tabs and list
+    readonly property bool ready: widget.dockerState === "ready" && !widget.showAbout
     // Tab 0 = running, tab 1 = stopped (only when enabled in the settings)
     readonly property bool onStoppedTab: widget.showInactive && tabs.currentIndex === 1
 
@@ -169,7 +170,7 @@ PlasmaExtras.Representation {
     // State: first load
     PlasmaComponents3.BusyIndicator {
         anchors.centerIn: parent
-        visible: full.widget.dockerState === "loading"
+        visible: full.widget.dockerState === "loading" && !full.widget.showAbout
         running: visible
     }
 
@@ -198,7 +199,15 @@ PlasmaExtras.Representation {
     WarningView {
         anchors.centerIn: parent
         width: parent.width - Kirigami.Units.gridUnit * 4
-        visible: full.widget.hasWarning
+        visible: full.widget.hasWarning && !full.widget.showAbout
+        widget: full.widget
+    }
+
+    // State: About page, opened from the panel icon's right-click menu
+    AboutView {
+        anchors.centerIn: parent
+        width: parent.width - Kirigami.Units.gridUnit * 4
+        visible: full.widget.showAbout
         widget: full.widget
     }
 }

@@ -52,6 +52,9 @@ Item {
         case "confirm":
             list.itemAtIndex(2).pendingAction = "stop";
             break;
+        case "about":
+            widget.showAbout = true;
+            break;
         case "settings":
             Plasmoid.internalAction("configure").trigger();
             break;
